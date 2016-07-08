@@ -1,0 +1,259 @@
+ĐẶC BIỆT CHÚ Ý TỚI DB::raw() đây là hàm được laravel hỗ trợ để sử dụng với sum, avg, count,... 
+
+
+Truy vấn tất cả những hàng từ một bảng CSDL
+
+$users = DB::table('users')->get();
+foreach ($users as $user) {
+	var_dump($user->name);
+}
+$users = DB::table('users')->get();
+foreach ($users as $user){
+	var_dump($user->name);
+}
+
+
+Truy vấn một hàng từ bảng CSDL
+
+$user = DB::table('users')->where('name', 'John')->first();
+var_dump($user->name);
+$user = DB::table('users')->where('name', 'John')->first();
+var_dump($user->name);
+
+
+Truy vấn một cột từ một hàng đơn
+
+$name = DB::table('users')->where('name', 'John')->pluck('name');
+$name = DB::table('users')->where('name', 'John')->pluck('name');
+
+
+Truy vấn danh sách từ 1 bảng giá trị
+
+$roles = DB::table('roles')->lists('title');
+$roles = DB::table('roles')->lists('title');
+
+
+Sử dụng mệnh đề select
+
+$users = DB::table('users')->select('name', 'email')->get();
+$users = DB::table('users')->distinct()->get();
+$users = DB::table('users')->select('name as user_name')->get();
+$users = DB::table('users')->select('name', 'email')->get();
+$users = DB::table('users')->distinct()->get();
+$users = DB::table('users')->select('name as user_name')->get();
+
+
+Thêm mệnh đề select tới một query
+
+$query = DB::table('users')->select('name');
+$users = $query->addSelect('age')->get();
+$query = DB::table('users')->select('name');
+$users = $query->addSelect('age')->get();
+
+
+Sử dụng từ khóa where
+
+$users = DB::table('users')->where('votes', '>', 100)->get();
+$users = DB::table('users')->where('votes', '>', 100)->get();
+Hoặc câu lệnh
+
+
+$users = DB::table('users')->where('votes', '>', 100)->orWhere('name', 'John')->get();
+$users = DB::table('users')->where('votes', '>', 100)->orWhere('name', 'John')->get();
+Sử dụng where between
+
+
+$users = DB::table('users')->whereBetween('votes', array(1, 100))->get();
+$users = DB::table('users')->whereBetween('votes', array(1, 100))->get();
+Sử dụng where not between
+
+
+$users = DB::table('users')->whereNotBetween('votes', array(1, 100))->get();
+$users = DB::table('users')->whereNotBetween('votes', array(1, 100))->get();
+Sử dụng where trong một mảng
+
+
+$users = DB::table('users')->whereIn('id', array(1, 2, 3))->get();
+$users = DB::table('users')->whereNotIn('id', array(1, 2, 3))->get();
+$users = DB::table('users')->whereIn('id', array(1, 2, 3))->get();
+$users = DB::table('users')->whereNotIn('id', array(1, 2, 3))->get();
+Sử dụng where với giá trị null hoặc có giá trị trả về nhưng lại không đặt giá trị
+
+
+$users = DB::table('users')->whereNull('updated_at')->get();
+$users = DB::table('users')->whereNull('updated_at')->get();
+Order By, Group By, và Having
+
+
+users = DB::table('users')->orderBy('name', 'desc')->groupBy('count')->having('count', '>', 100)->get();
+users = DB::table('users')->orderBy('name', 'desc')->groupBy('count')->having('count', '>', 100)->get();
+Offset & Limit
+
+
+$users = DB::table('users')->skip(10)->take(5)->get();
+$users = DB::table('users')->skip(10)->take(5)->get();
+Joins
+
+Câu lệnh join cơ bản
+
+
+DB::table('users')->join('contacts', 'users.id', '=', 'contacts.user_id')->join('orders', 'users.id', '=','orders.user_id')
+->select('users.id', 'contacts.phone', 'orders.price');
+DB::table('users')->join('contacts', 'users.id', '=', 'contacts.user_id')->join('orders', 'users.id', '=', orders.user_id')
+->select('users.id', 'contacts.phone', 'orders.price');
+Câu lệnh join trái
+
+
+DB::table('users')->leftJoin('posts', 'users.id', '=', 'posts.user_id')->get();
+DB::table('users')->leftJoin('posts', 'users.id', '=', 'posts.user_id')->get();
+Bạn cũng có thể nâng cấp với mệnh đề join
+
+
+DB::table('users')->join('contacts', function($join){
+$join->on('users.id', '=', 'contacts.user_id')->orOn(...);
+})->get();
+DB::table('users')->join('contacts', function($join){
+$join->on('users.id', '=', 'contacts.user_id')->orOn(...);
+})->get();
+
+Nếu bạn muốn sử dụng “where” trong mệnh đề join, bạn có thể sử dụng phương thức where và orwhere trong mệnh đề join. Thay vì so sánh 2 cột, những phương thức đó sẽ so sánh thêm cột giá trị lần nữa.
+
+
+DB::table('users')->join('contacts', function($join)
+{
+$join->on('users.id', '=', 'contacts.user_id')->where('contacts.user_id', '>', 5);
+})->get();
+DB::table('users')->join('contacts', function($join){
+$join->on('users.id', '=', 'contacts.user_id')->where('contacts.user_id', '>', 5);
+})->get();
+Mênh đề wheres nâng cao
+
+Đôi khi bạn cần tạo mệnh đề where phức tạp như “where exists” hay những mềnh đề where lồng nhau
+
+
+DB::table('users')->where('name', '=', 'John')->orWhere(function($query){
+$query->where('votes', '>', 100)->where('title', '<>', 'Admin');
+})->get();
+DB::table('users')->where('name', '=', 'John')->orWhere(function($query){
+$query->where('votes', '>', 100)->where('title', '<>', 'Admin');
+})->get();
+Query trên sẽ sinh mã SQL:
+
+
+select * from users where name = 'John' or (votes > 100 and title <> 'Admin');
+select * from users where name = 'John' or (votes > 100 and title <> 'Admin');
+Câu lệnh tồn tại
+
+
+DB::table('users')->whereExists(function($query){
+$query->select(DB::raw(1))->from('orders')->whereRaw('orders.user_id = users.id');
+})->get();
+DB::table('users')->whereExists(function($query){
+$query->select(DB::raw(1))->from('orders')->whereRaw('orders.user_id = users.id');
+})->get();
+Mã SQL
+
+
+select * from users
+where exists (
+select 1 from orders where orders.user_id = users.id)
+select * from users
+where exists (
+select 1 from orders where orders.user_id = users.id)
+Hàm
+
+Trong Laravel cũng có những hàm trong SQL như
+
+
+$users = DB::table('users')->count();
+$price = DB::table('orders')->max('price');
+$price = DB::table('orders')->min('price');
+$price = DB::table('orders')->avg('price');
+$total = DB::table('users')->sum('votes');
+$users = DB::table('users')->count();
+$price = DB::table('orders')->max('price');
+$price = DB::table('orders')->min('price');
+$price = DB::table('orders')->avg('price');
+$total = DB::table('users')->sum('votes');
+Raw Expressions
+
+Trong một số trường hợp ta cần sử dụng mã SQL nguyên mẫu trong loạt truy vấn của mình. Laravel cung cấp cho bạn phương thức DB::raw
+
+
+$users = DB::table('users')->select(DB::raw('count(*) as user_count, status'))->where('status', '<>', 1)->groupBy('status')->get();
+$users = DB::table('users')->select(DB::raw('count(*) as user_count, status'))->where('status', '<>', 1)->groupBy('status')->get();
+Tăng hoặc giảm giá trị của một cột
+
+
+DB::table('users')->increment('votes');
+DB::table('users')->increment('votes', 5);
+DB::table('users')->decrement('votes');
+DB::table('users')->decrement('votes', 5);
+DB::table('users')->increment('votes');
+DB::table('users')->increment('votes', 5);
+DB::table('users')->decrement('votes');
+DB::table('users')->decrement('votes', 5);
+Câu lệnh inserts
+
+Chèn một hàng giá trị vào 1 bảng
+
+
+DB::table('users')->insert(
+array('email' => 'john@example.com', 'votes' => 0)
+);
+DB::table('users')->insert(
+array('email' => 'john@example.com', 'votes' => 0)
+);
+Nếu bảng có id tự động tăng, thì ban dùng insertGetId để chèn và và lấy Id
+
+
+$id = DB::table('users')->insertGetId(
+array('email' => 'john@example.com', 'votes' => 0)
+);
+$id = DB::table('users')->insertGetId(
+array('email' => 'john@example.com', 'votes' => 0)
+);
+Thêm nhiều records vào một bảng
+
+
+DB::table('users')->insert(array(
+array('email' => 'taylor@example.com', 'votes' => 0),
+array('email' => 'dayle@example.com', 'votes' => 0),
+));
+DB::table('users')->insert(array(
+array('email' => 'taylor@example.com', 'votes' => 0),
+array('email' => 'dayle@example.com', 'votes' => 0),
+));
+Câu lệnh Updates
+
+
+DB::table('users')
+->where('id', 1)
+->update(array('votes' => 1));
+DB::table('users')
+->where('id', 1)
+->update(array('votes' => 1));
+Câu lênh Deletes
+
+Xóa 1 record tại một bảng
+
+
+DB::table('users')->where('votes', '<', 100)->delete();
+DB::table('users')->where('votes', '<', 100)->delete();
+Xóa toàn bộ record trên bảng
+
+
+DB::table('users')->delete();
+DB::table('users')->delete();
+Xóa nội dung của bảng
+
+
+DB::table('users')->truncate();
+DB::table('users')->truncate();
+Câu lệnh Union
+
+
+$first = DB::table('users')->whereNull('first_name');
+$users = DB::table('users')->whereNull('last_name')->union($first)->get();
+$first = DB::table('users')->whereNull('first_name');
+$users = DB::table('users')->whereNull('last_name')->union($first)->get();

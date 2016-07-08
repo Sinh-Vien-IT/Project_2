@@ -1,0 +1,2 @@
+﻿Chú ý tất cả các đường dẫn hình ảnh phải đầy đủ, chính xác nếu không thì sẽ bị tự động log out ra khỏi hệ thống
+Có thể xem ví dụ bằng cách sửa đường dẫn của 1 ảnh bất kì trong file users/index.blade.php

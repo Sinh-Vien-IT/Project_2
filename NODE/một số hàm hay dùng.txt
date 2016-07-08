@@ -1,0 +1,2 @@
+number_format($number,0,',','.'): hàm sẽ format số thành dạnh dấu chấm cách 3 vidu 4000000 sẽ thành 4.000.000
+date('Y-m-d H:i:s'): hiển thị thời gian theo dạng: năm-tháng-ngày giờ:phút:giây

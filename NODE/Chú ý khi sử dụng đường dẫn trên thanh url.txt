@@ -1,0 +1,5 @@
+Chú ý: Trong hệ thống có nhiều chỗ gửi id lên thanh url VD /member/update/{id}
+Điều này nếu không sử dụng biện pháp phòng tránh sẽ để người khác vào sửa.
+VD thành viên có id là 40 khi thực hiện cập nhật thông tin của mình thì vào sẽ truy cập vào địa chỉ /member/update/40 nhưng thành viên đó có thể sửa lại đường dẫn là /member/update/01 là địa chỉ để cập nhật thông tin của admin, điều này vô cùng nguy hiểm
+***Giải pháp
+- Trong controller sẽ so sánh nếu người đang sử dụng có id khác với id mà có trên url thì không cho phép truy cập trang. Xem ví dụ trong controller MemberUpdateController phương thức getUpdate

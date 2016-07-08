@@ -1,0 +1,1 @@
+Không được đặt tên thư mục là advertisement để chứa ảnh vì khi đó một số add on trên trình duyệt như adblock sẽ hiểu đó là quảng cáo và chặn nên không thể hiển thị được :v

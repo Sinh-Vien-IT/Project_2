@@ -1,0 +1,16 @@
+1) Chỉ admin mới có quyền quản trị người dùng, manager chỉ có quyền xem thông tin người dùng
+2) Đối với tài khoản thành viên thì sẽ xóa toàn bộ thông tin thành viên trong hệ thống, còn đối với tài khoản manager thì chỉ thay đổi trạng thái hoạt động từ 1->0
+3) Chỉ có admin mới thay đổi được trạng thái của manager và admin cũng chỉ có quyền này đối với manager mà không thể thay đổi trạng thái của thành viên
+4) Admin sẽ không thể tự xóa chính mình
+5) Không thể xóa hãng sản xuất khi vẫn còn sản phẩm của hãng trong hệ thống
+6) Sản phẩm mới được quy ước là sản phẩm được thêm vào hệ thống trong thời gian từ 1 tháng trước
+7) Khi khách hàng đăng ký là thành viên thì sẽ lưu trạng thái của khách hàng là 0
+- Nếu khách hàng truy cập vào link kích hoạt trong gmail thì sẽ đổi trang thái là 1
+- Nếu sau 10 ngày mà khách hàng không kích hoạt thì sẽ bị tài khoản
+8) Khi cập nhật đơn hàng nhập kho
+- Nếu sản phẩm mới và sản phẩm cũ không trùng nhau thì:
+	- Nếu sản phẩm cũ trong đơn hàng nhập kho có số lượng nhỏ hơn số lượng đã ghi trong đơn hàng thì sẽ không được cập nhật (nhỏ hơn là do có thể đã bị khách hàng đăng kí mua)
+	- Ngược lại sẽ cập nhật lại trường số lượng trong sản phẩm cũ và cập nhật lại số lượng trong sản phẩm mới
+- Nếu sản phẩm mới là sản phẩm cũ
+	- Sẽ cập nhật lại số lượng trong sản phẩm đó
+	Đã quyết định bỏ tính năng này! 

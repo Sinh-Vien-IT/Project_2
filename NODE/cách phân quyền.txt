@@ -1,0 +1,91 @@
+﻿Để phân quyền thì ta có những cách sau:
+1. Tạo ra 1 middleware mới 
+VD phân quyền admin
+B1: Tạo middleware IsRoleAdmin
+php artisan make:middleware IsRoleAdmin
+B2:Nội dung IsRoleAdmin:
+<?php
+ 
+namespace App\Http\Middleware;
+ 
+use Closure;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+ 
+class IsRoleAdmin
+{
+    /**
+    * Handle an incoming request.
+    *
+    * @param  \Illuminate\Http\Request  $request
+    * @param  \Closure  $next
+    * @return mixed
+    */
+    public function handle(Request $request, Closure $next)
+    {
+     
+        if(!Auth::check() or $request->user()->role!='admin') {
+            return redirect('unauthorized');
+        }
+        return $next($request);
+    }
+}
+B3: Sửa lại file Kernel.php
+<?php
+ 
+namespace App\Http;
+ 
+use Illuminate\Foundation\Http\Kernel as HttpKernel;
+ 
+class Kernel extends HttpKernel
+{
+    /**
+    * The application's global HTTP middleware stack.
+    *
+    * @var array
+    */
+    protected $middleware = [
+        \Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode::class,
+        \App\Http\Middleware\EncryptCookies::class,
+        \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
+        \Illuminate\Session\Middleware\StartSession::class,
+        \Illuminate\View\Middleware\ShareErrorsFromSession::class,
+        \App\Http\Middleware\VerifyCsrfToken::class,
+    ];
+ 
+    /**
+    * The application's route middleware.
+    *
+    * @var array
+    */
+    protected $routeMiddleware = [
+        'auth' => \App\Http\Middleware\Authenticate::class,
+        'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
+        'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
+        'isroleadmin' => \App\Http\Middleware\IsRoleAdmin::class,
+    ];
+}
+
+2. Ở đâu muốn phân quyền thì sử dụng
+VD Ở trong 1 function muốn chỉ có admin sử dụng hàm này thì:
+// check có user không
+if (Auth::check()){
+    if (Auth::user()->role != 'admin'){
+        // is not admin
+    }
+}
+else {
+//not login yet
+}
+VD Ở cả 1 controller thì: 
+public function __construct(){
+    // Closure as callback
+        $this->beforeFilter(function(){
+            if (!Auth::user())
+            return Redirect('login');
+            if (Auth::user()->role != 'admin')
+                return 'oops!You don\'t have permission to access this page!';
+        });
+       
+    }
+Có thể xem ở HomeController trong project_2

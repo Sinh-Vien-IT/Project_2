@@ -1,0 +1,4 @@
+- Để chuyển hướng tới một route khác ta dùng:
+return redirect()->route('ten route');
+- Để chuyển hướng tới url ta dùng:
+return redirect()->away('url'); VD trong WelcomController
